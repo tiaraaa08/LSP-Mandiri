@@ -18,7 +18,8 @@
                     <div class="mb-3">
                         <label class="form-label">Harga per KG
                         </label>
-                        <input type="text" id="hargaRupiah" class="form-control" placeholder="Masukkan Harga per KG" />
+                        <input type="text" id="hargaRupiah" class="form-control"
+                            placeholder="Masukkan Harga per KG" />
                     </div>
                 </form>
             </div>
@@ -31,8 +32,31 @@
     </div>
 </div>
 
-@push('script')
+@push('scripts')
     <script>
-
+       document.addEventListener('DOMContentLoaded', function () {
+            const rupiahInput = document.getElementById('hargaRupiah');
+    
+            rupiahInput.addEventListener('input', function() {
+                // ambil angka doang
+                let value = this.value.replace(/\D/g, '');
+    
+                // kalo kosong, kosongin input & stop
+                if (value === '') {
+                    this.value = '';
+                    return;
+                }
+    
+                // convert ke number dulu
+                value = Number(value);
+    
+                this.value = new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }).format(value);
+            });
+        });
     </script>
 @endpush

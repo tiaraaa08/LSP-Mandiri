@@ -18,7 +18,7 @@
                     <div class="mb-3">
                         <label class="form-label">Harga per KG
                         </label>
-                        <input type="text" id="hargaRupiah" class="form-control" placeholder="Masukkan Harga per KG" />
+                        <input type="text"  class="form-control" placeholder="Masukkan Harga per KG" />
                     </div>
                 </form>
             </div>

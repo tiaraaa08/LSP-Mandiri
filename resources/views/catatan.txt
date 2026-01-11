@@ -1,0 +1,5 @@
+1. format rupiah
+2. sweet alert
+3. crud basic
+4. validasi / requirement
+5. struk
