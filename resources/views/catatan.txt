@@ -3,3 +3,8 @@
 3. crud basic
 4. validasi / requirement
 5. struk
+
+                                <!-- <td>RP {{ number_format(12900, ',', '.') }}</td> -->
+
+                                kesusahan format rupiah saat store data
+                                

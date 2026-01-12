@@ -34,7 +34,7 @@
                             <span class="hide-menu">Home</span>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href={{ route('dashboard') }} aria-expanded="false">
+                            <a class="sidebar-link" href={{ route(name: 'dashboard') }} aria-expanded="false">
                                 <i class="ti ti-atom"></i>
                                 <span class="hide-menu">Dashboard</span>
                             </a>
@@ -43,7 +43,7 @@
                         <!-- Dashboard -->
                         <!-- ---------------------------------- -->
                         <li class="sidebar-item">
-                            <a class="sidebar-link justify-content-between" href="{{ route('index.layanan') }}"
+                            <a class="sidebar-link justify-content-between" href="{{ route('layanan.index') }}"
                                 aria-expanded="false">
                                 <div class="d-flex align-items-center gap-3">
                                     <span class="d-flex">
@@ -54,7 +54,7 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link justify-content-between" href="{{ route('index.transaksi') }}"
+                            <a class="sidebar-link justify-content-between" href="{{ route('transaksi.index') }}"
                                 aria-expanded="false">
                                 <div class="d-flex align-items-center gap-3">
                                     <span class="d-flex">

@@ -35,36 +35,58 @@
                         </thead>
                         <tbody>
                             <!-- start row -->
-                            <tr>
-                                <td>1</td>
-                                <td>Cuci Kering</td>
-                                <td>RP 8.000</td>
-                                <td>1</td>
-                                <td>Cuci Kering</td>
-                                <td>RP 8.000</td>
-                                <td>1</td>
-                                <td>Cuci Kering</td>
-                                <td>RP 8.000
-                                    <button class="btn bg-danger-subtle text-danger btn-sm" title="View Code"
-                                        data-bs-toggle="modal" data-bs-target="#bayarTransaksi">
-                                        <i class="ti ti-wallet fs-5 d-flex">Bayar</i>
-                                    </button>
-                                </td>
-                                <td>
-                                    <div>
-                                        <button type="button"
-                                            class="btn waves-effect waves-light btn-rounded bg-info-subtle text-info"
-                                            data-bs-toggle="modal" data-bs-target="#editTransaksi">
-                                            <i class="ti ti-pencil fs-5 d-flex"></i>
+                             @forelse ($transaksi as $trans)
+                             <tr>
+                                 <td>{{ $loop->iteration }}</td>
+                                 <td>{{ $trans->waktu_transaksi }}</td>
+                                 <td>{{ $trans->nama_pelanggan }}</td>
+                                 <td>{{ $trans->layanan->nama_layanan }}</td>
+                                 <td>{{ $trans->berat }}KG</td>
+                                 <td>RP {{ number_format($trans->layanan->harga_per_kg, 0, ',', '.') }}</td>
+                                 <td>RP {{ number_format($trans->layanan->harga_per_kg, 0, ',', '.') }}</td>
+                                 <!-- <td>{{ $trans->harga_per_kg }}</td> -->
+                                 <td>{{ $trans->keterangan }}</td>
+                                 <td>{{ $trans->pembayaran }}
+                                    @if ( $trans->pembayaran == 'Belum Bayar' )
+                                    <form action="{{ route('transaksi.bayar', $trans->id) }}" method="POST" class="KonfirmasiBayar">
+                                        @csrf
+                                        @method('POST')
+                                        <button type="submit" class="btn waves-effect waves-light btn-rounded bg-danger-subtle text-danger">
+                                             <i class="ti ti-credit-card fs-5 d-flex">Bayar</i>
                                         </button>
-                                        <button type="button"
-                                            class="btn waves-effect waves-light btn-rounded bg-danger-subtle text-danger"
-                                            onclick="KonfirmasiHapus()">
-                                            <i class="ti ti-trash fs-5 d-flex"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </form>
+                                    @endif
+                                 </td>
+                                 <td>
+                                     <div class="d-flex gap-2">
+                                         <button type="button"
+                                             class="btn waves-effect waves-light btn-rounded bg-info-subtle text-info"
+                                             data-bs-toggle="modal" data-bs-target="#editTransaksi{{ $trans->id }}">
+                                             <i class="ti ti-pencil fs-5 d-flex"></i>
+                                         </button>
+                                         <form action="{{ route('transaksi.destroy', $trans->id) }}" method="POST" class="KonfirmasiHapus">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="btn waves-effect waves-light btn-rounded bg-danger-subtle text-danger">
+                                                <i class="ti ti-trash fs-5 d-flex"></i>
+                                            </button>
+                                         </form>
+                                         @if ($trans->pembayaran == 'Lunas')
+                                        <a type="button" href="{{ route('struk', $trans->id) }}"
+                                            class="btn waves-effect waves-light btn-rounded bg-success-subtle text-success">
+                                            <i class="ti ti-receipt fs-5 d-flex"></i>
+                                        </a>
+                                         @endif
+                                     </div>
+                                 </td>
+                             </tr>
+                            @include('transaksi.edit')
+                             @empty
+                             <tr>
+                                <td colspan="10" class="text-center text-danger"> Data Transaksi Tidak Tersedia</td>
+                             </tr>
+                             @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -72,6 +94,56 @@
         </div>
     </div>
     @include('transaksi.tambah')
-    @include('transaksi.edit')
     @include('transaksi.bayar')
 @endsection
+
+@push('scripts')
+  <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+        //untuk bayar
+            const forms = document.querySelectorAll('.KonfirmasiBayar');
+            forms.forEach( form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    Swal.fire({
+                         title: 'Ubah Status Menjadi Lunas?',
+                        text: "Pastikan Pembayaran Sudah Diselesaikan",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, sudah!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                })
+            })
+
+            //untuk hapus
+            const hapus = document.querySelectorAll('.KonfirmasiHapus');
+            hapus.forEach( form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    Swal.fire({
+                         title: 'Apakah Anda Yakin?',
+                        text: "Data Yang Sudah Terhapus Tidak Dapat Dikembalikan",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, sudah!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                })
+            })
+        });
+    </script>
+@endpush

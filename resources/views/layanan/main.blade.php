@@ -29,24 +29,31 @@
                         </thead>
                         <tbody>
                             <!-- start row -->
-                            <tr>
-                                <td>1</td>
-                                <td>Cuci Kering</td>
-                                <td>RP 8.000</td>
-                                <td>
-                                    <div>
-                                        <button type="button"
-                                            class="btn waves-effect waves-light btn-rounded bg-info-subtle text-info"
-                                            data-bs-toggle="modal" data-bs-target="#editLayanan">
-                                            <i class="ti ti-pencil fs-5 d-flex"></i>
-                                        </button>
-                                        <button type="button"
-                                            class="btn waves-effect waves-light btn-rounded bg-danger-subtle text-danger" onclick="KonfirmasiHapus()">
-                                            <i class="ti ti-trash fs-5 d-flex"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
+                             @foreach ($layanan as $i)
+                             <tr>
+                                 <td>{{ $loop->iteration }}</td>
+                                 <td>{{ $i->nama_layanan }}</td>
+                                 <td>RP {{ number_format($i->harga_per_kg, 0, ',', '.') }}</td>
+                                 <td>
+                                     <div class="d-flex justify-content-start gap-2">
+                                         <button type="button"
+                                             class="btn waves-effect waves-light btn-rounded bg-info-subtle text-info"
+                                             data-bs-toggle="modal" data-bs-target="#editLayanan{{ $i->id }}">
+                                             <i class="ti ti-pencil fs-5 d-flex"></i>
+                                         </button>
+                                         <form action="{{ route('layanan.destroy', $i->id) }}" method="POST" class="KonfirmasiHapus">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="btn waves-effect waves-light btn-rounded bg-danger-subtle text-danger">
+                                                <i class="ti ti-trash fs-5 d-flex"></i>
+                                            </button>
+                                         </form>
+                                     </div>
+                                 </td>
+                             </tr>
+                            @include('layanan.edit')
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -54,5 +61,31 @@
         </div>
     </div>
     @include('layanan.tambah')
-    @include('layanan.edit')
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const forms = document.querySelectorAll('.KonfirmasiHapus');
+            forms.forEach( form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: "Data transaksi akan dihapus secara permanen!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                })
+            })
+        });
+    </script>
+@endpush

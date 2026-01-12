@@ -8,48 +8,53 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <hr>
-            <div class="modal-body">
-                <form class="form-horizontal">
+            <form class="form-horizontal" action="{{ route('layanan.store') }}" method="POST">
+                @csrf
+                @method('POST')
+                <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Nama Layanan
                         </label>
-                        <input type="text" class="form-control" placeholder="Masukkan Nama Layanan" />
+                        <input type="text" name="nama_layanan" class="form-control" placeholder="Masukkan Nama Layanan" />
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Harga per KG
                         </label>
-                        <input type="text" id="hargaRupiah" class="form-control"
-                            placeholder="Masukkan Harga per KG" />
+                        <input type="text" name="harga_per_kg" id="hargaRupiah" class="form-control" placeholder="Masukkan Harga per KG" />
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn bg-danger-subtle text-danger  waves-effect" data-bs-dismiss="modal">
-                    Close
-                </button>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn bg-success-subtle text-success  waves-effect"
+                        data-bs-dismiss="modal">
+                        Simpan
+                    </button>
+                    <button type="button" class="btn bg-danger-subtle text-danger  waves-effect"
+                        data-bs-dismiss="modal">
+                        Tutup
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
 @push('scripts')
     <script>
-       document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function () {
             const rupiahInput = document.getElementById('hargaRupiah');
-    
-            rupiahInput.addEventListener('input', function() {
-                // ambil angka doang
+
+            rupiahInput.addEventListener('input', function () {
                 let value = this.value.replace(/\D/g, '');
-    
+
                 // kalo kosong, kosongin input & stop
                 if (value === '') {
                     this.value = '';
                     return;
                 }
-    
+
                 // convert ke number dulu
                 value = Number(value);
-    
+
                 this.value = new Intl.NumberFormat('id-ID', {
                     style: 'currency',
                     currency: 'IDR',
