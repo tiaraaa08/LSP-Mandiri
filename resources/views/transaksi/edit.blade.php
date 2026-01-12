@@ -15,12 +15,12 @@
                         <div class="col-4">
                             <label class="form-label">Tanggal
                             </label>
-                            <input type="date" value="{{ $trans->waktu_transaksi }}" name="waktu_transaksi" class="form-control" placeholder="Masukkan Nama Layanan" />
+                            <input required type="date" value="{{ $trans->waktu_transaksi }}" name="waktu_transaksi" class="form-control" placeholder="Masukkan Nama Layanan" />
                         </div>
                         <div class="col-8">
                             <label class="form-label">Nama Pelanggan
                             </label>
-                            <input type="text" value="{{ $trans->nama_pelanggan }}" name="nama_pelanggan" class="form-control" placeholder="Masukkan Nama Pelanggan" />
+                            <input required type="text" value="{{ $trans->nama_pelanggan }}" name="nama_pelanggan" class="form-control" placeholder="Masukkan Nama Pelanggan" />
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -28,7 +28,7 @@
                             <label class="form-label">Layanan
                             </label>
                             <div class="form-group">
-                                <select class="form-control" name="id_layanan" id="exampleFormControlSelect1">
+                                <select class="form-control" name="id_layanan" id="exampleFormControlSelect1" required>
                                     @foreach ($layanan as $layan)
                                     <option value="{{ $layan->id }}" {{ $trans->id_layanan ==  $layan->id ? 'selected' : '' }}>{{ $layan->nama_layanan }} => RP {{ number_format($layan->harga_per_kg, 0, ',', '.') }}</option>
                                     @endforeach
@@ -39,7 +39,7 @@
                             <label class="form-label">Berat
                             </label>
                             <div class="input-group">
-                                <input value="{{ $trans->berat }}" type="text" name="berat" class="form-control" placeholder="Masukkan Berat" />
+                                <input required value="{{ $trans->berat }}" type="text" name="berat" class="form-control" placeholder="Masukkan Berat" />
                                 <span class="input-group-text">KG</span>
                             </div>
                         </div>
@@ -53,7 +53,7 @@
                         <div class="col-7">
                             <label class="form-label">Jumlah Bayar
                             </label>
-                            <input type="text" class="hargaRupiah form-control" placeholder="Masukkan Jumlah Bayar" />
+                            <input required type="text" class="hargaRupiah form-control" placeholder="Masukkan Jumlah Bayar" />
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -61,7 +61,7 @@
                             <label class="form-label">Pembayaran
                             </label>
                             <div class="form-group">
-                                <select class="form-control" name="pembayaran" id="exampleFormControlSelect1">
+                                <select class="form-control" name="pembayaran" id="exampleFormControlSelect1" required>
                                     <option value="Lunas" {{ $trans->pembayaran == 'Lunas' ? 'selected' : '' }}>Lunas</option>
                                     <option value="Belum Bayar" {{ $trans->pembayaran === 'Belum Bayar' ? 'selected' : '' }}>Belum Bayar</option>
                                 </select>
@@ -71,7 +71,7 @@
                            <label class="form-label">Keterangan
                         </label>
                         <div class="form-group">
-                            <select class="form-control" name="keterangan" id="exampleFormControlSelect1">
+                            <select class="form-control" name="keterangan" id="exampleFormControlSelect1" required>
                                 <option selected value="Proses" {{ $trans->keterangan === 'Proses' ? 'selected' : '' }}>Proses</option>
                                 <option selected value="Selesai" {{ $trans->keterangan === 'Selesai' ? 'selected' : '' }}>Selesai</option>
                             </select>

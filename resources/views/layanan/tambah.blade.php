@@ -15,12 +15,12 @@
                     <div class="mb-3">
                         <label class="form-label">Nama Layanan
                         </label>
-                        <input type="text" name="nama_layanan" class="form-control" placeholder="Masukkan Nama Layanan" />
+                        <input required type="text" name="nama_layanan" class="form-control" placeholder="Masukkan Nama Layanan" />
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Harga per KG
                         </label>
-                        <input type="text" name="harga_per_kg" id="hargaRupiah" class="form-control" placeholder="Masukkan Harga per KG" />
+                        <input required type="text" name="harga_per_kg" id="hargaRupiah" class="form-control" placeholder="Masukkan Harga per KG" />
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -16,12 +16,12 @@
                         <div class="col-4">
                             <label class="form-label">Tanggal
                             </label>
-                            <input type="date" name="waktu_transaksi" class="form-control" placeholder="Masukkan Nama Layanan" />
+                            <input required type="date" name="waktu_transaksi" class="form-control" placeholder="Masukkan Nama Layanan" />
                         </div>
                         <div class="col-8">
                             <label class="form-label">Nama Pelanggan
                             </label>
-                            <input type="text" name="nama_pelanggan" class="form-control" placeholder="Masukkan Nama Pelanggan" />
+                            <input required type="text" name="nama_pelanggan" class="form-control" placeholder="Masukkan Nama Pelanggan" />
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -29,9 +29,9 @@
                             <label class="form-label">Layanan
                             </label>
                             <div class="form-group">
-                                <select class="form-control" name="id_layanan" id="exampleFormControlSelect1">
+                                <select id="layanan" required class="form-control" name="id_layanan" id="exampleFormControlSelect1">
                                     @foreach ($layanan as $layan)
-                                    <option value="{{ $layan->id }}">{{ $layan->nama_layanan }} => RP {{ number_format($layan->harga_per_kg, 0, ',', '.') }}</option>
+                                    <option value="{{ $layan->id }}" data-harga="{{ $layan->harga_per_kg }}" >{{ $layan->nama_layanan }} => RP {{ number_format($layan->harga_per_kg, 0, ',', '.') }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -40,7 +40,7 @@
                             <label class="form-label">Berat
                             </label>
                             <div class="input-group">
-                                <input type="text" name="berat" class="form-control" placeholder="Masukkan Berat" />
+                                <input required type="text" id="berat" name="berat" class="form-control" placeholder="Masukkan Berat" />
                                 <span class="input-group-text">KG</span>
                             </div>
                         </div>
@@ -49,12 +49,12 @@
                         <div class="col-5">
                             <label class="form-label">Total
                             </label>
-                              <input type="text" readonly class="form-control" placeholder="Masukkan Jumlah Bayar" />
+                              <input type="text" id="TotalBayar" readonly class="form-control" placeholder="Masukkan Jumlah Bayar" />
                         </div>
                         <div class="col-7">
                             <label class="form-label">Jumlah Bayar
                             </label>
-                            <input type="text" class="hargaRupiah form-control" placeholder="Masukkan Jumlah Bayar" />
+                            <input required type="text" id="hargaRupiah" class="form-control" placeholder="Masukkan Jumlah Bayar" />
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -62,7 +62,7 @@
                             <label class="form-label">Pembayaran
                             </label>
                             <div class="form-group">
-                                <select class="form-control" name="pembayaran" id="exampleFormControlSelect1">
+                                <select required class="form-control" name="pembayaran" id="exampleFormControlSelect1">
                                     <option value="Lunas">Lunas</option>
                                     <option value="Belum Bayar">Belum Bayar</option>
                                 </select>
@@ -72,7 +72,7 @@
                            <label class="form-label">Keterangan
                         </label>
                         <div class="form-group">
-                            <select class="form-control" name="keterangan" id="exampleFormControlSelect1">
+                            <select required class="form-control" name="keterangan" id="exampleFormControlSelect1">
                                 <option selected value="Proses">Proses</option>
                             </select>
                         </div>
@@ -94,22 +94,14 @@
     </div>
 </div>
 
-@push('script')
+@push('scripts')
     <script>
        document.addEventListener('DOMContentLoaded', function () {
-            const rupiahInput = document.getElementsByClassName('hargaRupiah');
+        //format rupiah
+            const rupiahInput = document.getElementById('hargaRupiah');
 
             rupiahInput.addEventListener('input', function () {
                 let value = this.value.replace(/\D/g, '');
-
-                // kalo kosong, kosongin input & stop
-                if (value === '') {
-                    this.value = '';
-                    return;
-                }
-
-                // convert ke number dulu
-                value = Number(value);
 
                 this.value = new Intl.NumberFormat('id-ID', {
                     style: 'currency',
@@ -118,6 +110,19 @@
                     maximumFractionDigits: 0
                 }).format(value);
             });
+
+            //auto fill Total
+            const berat = document.getElementById('berat');
+            const layanan = document.getElementById('layanan');
+            const total =document.getElementById('TotalBayar');
+
+            function hitung() {
+                const b = berat.value || 0;
+                const h = layanan.selectedOptions[0].dataset.harga;
+                total.value = b * h;
+            }
+            berat.oninput = hitung;
+            layanan.onchange = hitung;
         });
     </script>
 @endpush

@@ -12,12 +12,12 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Nama Layanan </label>
-                        <input type="text" class="form-control" name="nama_layanan" placeholder="Masukkan Nama Layanan"
+                        <input required type="text" class="form-control" name="nama_layanan" placeholder="Masukkan Nama Layanan"
                             value="{{ $i->nama_layanan }}" />
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Harga per KG </label>
-                        <input type="text" name="harga_per_kg" class="form-control rupiah-edit" placeholder="Masukkan Harga per KG"
+                        <input required type="text" name="harga_per_kg" class="form-control rupiah-edit" placeholder="Masukkan Harga per KG"
                             value="{{ $i->harga_per_kg }}" />
                     </div>
                 </div>
