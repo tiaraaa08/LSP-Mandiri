@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('nama_pelanggan')->length(50);
             $table->integer('id_layanan');
             $table->integer('berat');
+            $table->timestamps();
             $table->enum('keterangan', ['Proses', 'Selesai'])->default('Proses');
             $table->enum('pembayaran', ['Lunas', 'Belum Bayar'])->default('Lunas');
 

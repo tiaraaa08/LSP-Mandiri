@@ -16,7 +16,7 @@
                     </div>
                 </div>
                 <div class="table-responsive border rounded-4">
-                    <table class="table mb-0">
+                    <table class="table mb-0" id="tableLayanan">
                         <thead class="table-dark">
                             <!-- start row -->
                             <tr>
@@ -29,7 +29,7 @@
                         </thead>
                         <tbody>
                             <!-- start row -->
-                             @foreach ($layanan as $i)
+                             @forelse ($layanan as $i)
                              <tr>
                                  <td>{{ $loop->iteration }}</td>
                                  <td>{{ $i->nama_layanan }}</td>
@@ -53,7 +53,11 @@
                                  </td>
                              </tr>
                             @include('layanan.edit')
-                            @endforeach
+                            @empty
+                            <tr>
+                                <td colspan="4" class="text-danger text-center">Data Layanan Tidak Tersedia</td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -86,6 +90,12 @@
                     });
                 })
             })
+        });
+    </script>
+
+    <script>
+       $(document).ready(function() {
+            $('#tableLayanan').DataTable();
         });
     </script>
 @endpush

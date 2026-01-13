@@ -24,7 +24,7 @@
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
                                 <h6 class="fw-medium text-primary mb-0">Transaksi</h6>
-                                <h4 class="fs-7">{{$transaksi->count()}}</h4>
+                                <h4 class="fs-7">{{ $transaksi->count() }}</h4>
                             </div>
                             <span class="text-primary display-6">
                                 <i class="ti ti-clipboard"></i>
@@ -39,7 +39,7 @@
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
                                 <h6 class="fw-medium text-success mb-0">Sedang Diproses</h6>
-                                <h4 class="fs-7">{{$proses}}</h4>
+                                <h4 class="fs-7">{{ $proses }}</h4>
                             </div>
                             <div class="ms-auto">
                                 <span class="text-success display-6">
@@ -75,34 +75,51 @@
                     </div>
                 </div>
 
-                <div class="table-responsive border rounded-4">
-                          <table class="table mb-0">
-                              <thead class="table-dark">
-                                  <!-- start row -->
-                                  <tr>
-                                      <th class="text-white">No</th>
-                                      <th class="text-white">Tanggal Transaksi</th>
-                                      <th class="text-white">Nama Pelanggan</th>
-                                      <th class="text-white">Layanan</th>
-                                      <th class="text-white">Berat</th>
-                                      <th class="text-white">Pembayaran</th>
-                                  </tr>
-                                  <!-- end row -->
-                              </thead>
-                              <tbody>
-                                  <!-- start row -->
-                                  <tr>
-                                      <td>1</td>
-                                      <td>Cuci Kering</td>
-                                      <td>RP 8.000</td>
-                                      <td>1</td>
-                                      <td>Cuci Kering</td>
-                                      <td>RP 8.000</td>
-                                  </tr>
-                              </tbody>
-                          </table>
-                      </div>
+                <div class="table-responsive rounded-4">
+                    <table class="table mb-0" id="tableMain">
+                        <thead class="table-dark">
+                            <!-- start row -->
+                            <tr>
+                                <th class="text-white">No</th>
+                                <th class="text-white">Tanggal Transaksi</th>
+                                <th class="text-white">Nama Pelanggan</th>
+                                <th class="text-white">Layanan</th>
+                                <th class="text-white">Berat</th>
+                                <th class="text-white">Pembayaran</th>
+                            </tr>
+                            <!-- end row -->
+                        </thead>
+                        <tbody>
+                            @forelse ($transaksi as $t)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ date('d-m-Y', strtotime($t->waktu_transaksi)) }}</td>
+                                    <td>{{ $t->nama_pelanggan }}</td>
+                                    <td>{{ $t->layanan->nama_layanan }}</td>
+                                    <td>{{ $t->berat }}</td>
+                                    @if ($t->pembayaran === 'Belum Bayar')
+                                        <td class="text-danger">{{ $t->pembayaran }}</td>
+                                    @else
+                                        <td class="text-danger">{{ $t->pembayaran }}</td>
+                                    @endif
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="text-danger text-center">Data Pesanan Belum Tersedia</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('#tableMain').DataTable();
+        });
+    </script>
+@endpush

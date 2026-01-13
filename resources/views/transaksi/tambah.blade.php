@@ -30,6 +30,7 @@
                             </label>
                             <div class="form-group">
                                 <select id="layanan" required class="form-control" name="id_layanan" id="exampleFormControlSelect1">
+                                    <option> Pilih Layanan</option>
                                     @foreach ($layanan as $layan)
                                     <option value="{{ $layan->id }}" data-harga="{{ $layan->harga_per_kg }}" >{{ $layan->nama_layanan }} => RP {{ number_format($layan->harga_per_kg, 0, ',', '.') }}</option>
                                     @endforeach
@@ -111,18 +112,30 @@
                 }).format(value);
             });
 
-            //auto fill Total
+            //auto fill Total + format rupiah
             const berat = document.getElementById('berat');
             const layanan = document.getElementById('layanan');
             const total =document.getElementById('TotalBayar');
 
+             function rupiahFormat(angka){
+                return new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    maximumFractionDigits: 0,
+                    minimumFractionDigits:0
+                }).format(angka)
+            }
+
             function hitung() {
                 const b = berat.value || 0;
                 const h = layanan.selectedOptions[0].dataset.harga;
-                total.value = b * h;
+                const hasil = b * h;
+
+                total.value = hasil ? rupiahFormat(hasil) : '';
             }
-            berat.oninput = hitung;
-            layanan.onchange = hitung;
+            
+            berat.addEventListener('input', hitung);
+            layanan.addEventListener('change', 'hitung');
         });
     </script>
 @endpush

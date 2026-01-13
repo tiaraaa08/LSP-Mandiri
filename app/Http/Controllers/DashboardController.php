@@ -11,7 +11,7 @@ class DashboardController extends Controller
     public function index(){
 
         $layanan = Layanan::all();
-        $transaksi = Transaksi::all();
+        $transaksi = Transaksi::orderByDesc('waktu_transaksi')->paginate(5);
 
         $proses = Transaksi::where('keterangan', 'proses')->count();
         $belumBayar = Transaksi::where('pembayaran', 'Belum Bayar')->count();

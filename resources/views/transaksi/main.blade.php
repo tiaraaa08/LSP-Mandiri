@@ -15,8 +15,8 @@
                         </button>
                     </div>
                 </div>
-                <div class="table-responsive border rounded-4">
-                    <table class="table mb-0">
+                <div class="table-responsive rounded-4">
+                    <table class="table mb-0" id="tabelTransaksi">
                         <thead class="table-dark">
                             <!-- start row -->
                             <tr>
@@ -144,6 +144,13 @@
                     });
                 })
             })
+        });
+    </script>
+
+    <script>
+        //datatable
+        $(document).ready(function() {
+            $('#tabelTransaksi').DataTable();
         });
     </script>
 @endpush
