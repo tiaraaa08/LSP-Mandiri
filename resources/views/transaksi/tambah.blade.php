@@ -81,6 +81,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <h5 class="d-flex flex-start">Kembalian : <div id="kembalian"></div> </h5>
                     <button type="submit" class="btn bg-success-subtle text-success  waves-effect"
                         data-bs-dismiss="modal">
                         Simpan
@@ -115,7 +116,7 @@
             //auto fill Total + format rupiah
             const berat = document.getElementById('berat');
             const layanan = document.getElementById('layanan');
-            const total =document.getElementById('TotalBayar');
+            const total = document.getElementById('TotalBayar');
 
              function rupiahFormat(angka){
                 return new Intl.NumberFormat('id-ID', {
@@ -134,8 +135,17 @@
                 total.value = hasil ? rupiahFormat(hasil) : '';
             }
             
+            function kembalian() {
+                const totbayar = total.value.replace(/\D/g, '') || 0;
+                const jumbayar = rupiahInput.value.replace(/\D/g, '') || 0;
+                const kembalian = jumbayar - totbayar;
+
+                document.getElementById('kembalian').innerText = rupiahFormat(kembalian);
+            }
+
+            rupiahInput.addEventListener('input', kembalian);
             berat.addEventListener('input', hitung);
-            layanan.addEventListener('change', 'hitung');
+            layanan.addEventListener('change', hitung);
         });
     </script>
 @endpush
