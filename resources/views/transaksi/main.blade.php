@@ -43,7 +43,7 @@
                                  <td>{{ $trans->layanan->nama_layanan }}</td>
                                  <td>{{ $trans->berat }}KG</td>
                                  <td>RP {{ number_format($trans->layanan->harga_per_kg, 0, ',', '.') }}</td>
-                                 <td>RP {{ number_format($trans->layanan->harga_per_kg, 0, ',', '.') }}</td>
+                                 <td>RP {{ number_format($trans->layanan->harga_per_kg * $trans->berat, 0, ',', '.') }}</td>
                                  <!-- <td>{{ $trans->harga_per_kg }}</td> -->
                                  <td>{{ $trans->keterangan }}</td>
                                  <td>{{ $trans->pembayaran }}
@@ -153,4 +153,15 @@
             $('#tabelTransaksi').DataTable();
         });
     </script>
+
+    <!-- sweet alert success -->
+     @if (session('success'))
+     <script>
+        Swal.fire({
+            icon: 'success',
+            text: '{{ session('success') }}',
+            confirmButtonText: 'OK'
+        });
+     </script>
+     @endif
 @endpush

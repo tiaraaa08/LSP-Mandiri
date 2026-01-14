@@ -135,7 +135,7 @@
             }
             
             berat.addEventListener('input', hitung);
-            layanan.addEventListener('change', 'hitung');
+            layanan.addEventListener('change', hitung);
         });
     </script>
 @endpush
