@@ -1,4 +1,4 @@
-<div id="editTransaksi{{ $trans->id }}" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" aria-hidden="true">
+<div id="editTransaksi{{ $trans->id }}" class="modal modalEdit fade" tabindex="-1" aria-labelledby="bs-example-modal-md" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-md">
         <div class="modal-content">
             <div class="modal-header d-flex align-items-center">
@@ -28,9 +28,9 @@
                             <label class="form-label">Layanan
                             </label>
                             <div class="form-group">
-                                <select class="form-control" name="id_layanan" id="exampleFormControlSelect1" required>
+                                <select class="form-control layananEdit" name="id_layanan" required>
                                     @foreach ($layanan as $layan)
-                                    <option value="{{ $layan->id }}" {{ $trans->id_layanan ==  $layan->id ? 'selected' : '' }}>{{ $layan->nama_layanan }} => RP {{ number_format($layan->harga_per_kg, 0, ',', '.') }}</option>
+                                    <option value="{{ $layan->id }}" {{ $trans->id_layanan ==  $layan->id ? 'selected' : '' }} data-harga-edit="{{ $layan->harga_per_kg }}">{{ $layan->nama_layanan }} => RP {{ number_format($layan->harga_per_kg, 0, ',', '.') }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -39,7 +39,7 @@
                             <label class="form-label">Berat
                             </label>
                             <div class="input-group">
-                                <input required value="{{ $trans->berat }}" type="text" name="berat" class="form-control" placeholder="Masukkan Berat" />
+                                <input required value="{{ $trans->berat }}" type="text" name="berat" class="form-control beratEdit" placeholder="Masukkan Berat" />
                                 <span class="input-group-text">KG</span>
                             </div>
                         </div>
@@ -48,12 +48,12 @@
                         <div class="col-5">
                             <label class="form-label">Total
                             </label>
-                              <input type="text" readonly class="form-control" placeholder="Masukkan Jumlah Bayar" />
+                              <input type="text" readonly class="form-control totalBayarEdit" placeholder="Masukkan Jumlah Bayar" />
                         </div>
                         <div class="col-7">
                             <label class="form-label">Jumlah Bayar
                             </label>
-                            <input required type="text" class="hargaRupiah form-control" placeholder="Masukkan Jumlah Bayar" />
+                            <input required type="text" class="jumlahBayarEdit form-control" placeholder="Masukkan Jumlah Bayar" />
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -61,7 +61,7 @@
                             <label class="form-label">Pembayaran
                             </label>
                             <div class="form-group">
-                                <select class="form-control" name="pembayaran" id="exampleFormControlSelect1" required>
+                                <select class="form-control" name="pembayaran" id="pembayaranEdit" required>
                                     <option value="Lunas" {{ $trans->pembayaran == 'Lunas' ? 'selected' : '' }}>Lunas</option>
                                     <option value="Belum Bayar" {{ $trans->pembayaran === 'Belum Bayar' ? 'selected' : '' }}>Belum Bayar</option>
                                 </select>
@@ -71,7 +71,7 @@
                            <label class="form-label">Keterangan
                         </label>
                         <div class="form-group">
-                            <select class="form-control" name="keterangan" id="exampleFormControlSelect1" required>
+                            <select class="form-control" name="keterangan" id="keteranganEdit" required>
                                 <option selected value="Proses" {{ $trans->keterangan === 'Proses' ? 'selected' : '' }}>Proses</option>
                                 <option selected value="Selesai" {{ $trans->keterangan === 'Selesai' ? 'selected' : '' }}>Selesai</option>
                             </select>
@@ -94,29 +94,45 @@
     </div>
 </div>
 
-@push('script')
+@push('scripts')
     <script>
-       document.addEventListener('DOMContentLoaded', function () {
-            const rupiahInput = document.getElementsByClassName('hargaRupiah');
+       document.addEventListener('DOMContentLoaded', () => {
+        
+        //fugsi format rupiah
+        function rupiahFormat(angka){
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                maximumFractionDigits: 0,
+                minimumFractionDigits: 0
+            }).format(angka);
+        }
 
-            rupiahInput.addEventListener('input', function () {
-                let value = this.value.replace(/\D/g, '');
+        //per modal
+            document.querySelectorAll('.modalEdit').forEach( modal => {
+                const beratEdit = document.querySelector('.beratEdit');
+                const layananEdit = document.querySelector('.layananEdit');
+                const totalEdit = document.querySelector('.totalBayarEdit');
+                const jumlahBayarEdit = document.querySelector('.jumlahBayarEdit');
 
-                // kalo kosong, kosongin input & stop
-                if (value === '') {
-                    this.value = '';
-                    return;
+                //function hitung total
+                function hitungTotal() {
+                    const berat = beratEdit.value || 0;
+                    const layanan = layananEdit.selectedOptions[0].dataset.hargaEdit || 0;
+                    const hasil = berat * layanan;
+
+                    totalEdit.value = hasil ? rupiahFormat(hasil): '';
                 }
 
-                // convert ke number dulu
-                value = Number(value);
+                beratEdit.addEventListener('input', hitungTotal);
+                layananEdit.addEventListener('change', hitungTotal);
 
-                this.value = new Intl.NumberFormat('id-ID', {
-                    style: 'currency',
-                    currency: 'IDR',
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 0
-                }).format(value);
+                jumlahBayarEdit.addEventListener('input', function() {
+                    let val = this.value.replace(/\D/g, '');
+                    this.value = val ? rupiahFormat(val) : '';
+                });
+
+                modal.addEventListener('shown.bs.modal', hitungTotal);
             });
         });
     </script>
