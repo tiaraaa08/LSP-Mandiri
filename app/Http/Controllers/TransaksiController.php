@@ -30,7 +30,7 @@ class TransaksiController extends Controller
 
         Transaksi::create($validatedData);
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Data Transaksi Telah Tersimpan');
     }
 
     public function bayar($id)
@@ -54,13 +54,13 @@ class TransaksiController extends Controller
 
         $transaksi = Transaksi::findOrFail($id);
         $transaksi->update($validatedData);
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Data Transaksi Telah Diperbarui');
     }
 
     public function destroy($id)
     {
         $hapus = Transaksi::findOrFail($id);
         $hapus->delete();
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Data Transaksi Telah Dihapus');
     }
 }
