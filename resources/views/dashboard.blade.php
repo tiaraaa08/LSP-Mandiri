@@ -96,7 +96,7 @@
                                     <td>{{ date('d-m-Y', strtotime($t->waktu_transaksi)) }}</td>
                                     <td>{{ $t->nama_pelanggan }}</td>
                                     <td>{{ $t->layanan->nama_layanan }}</td>
-                                    <td>{{ $t->berat }}</td>
+                                    <td>{{ $t->berat }} KG</td>
                                     @if ($t->pembayaran === 'Belum Bayar')
                                         <td class="text-danger">{{ $t->pembayaran }}</td>
                                     @else
